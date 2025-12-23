@@ -1,0 +1,18 @@
+--CREATE TABLE IF NOT EXISTS users (
+--    id CHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin PRIMARY KEY,
+--    firstname VARCHAR(50) NOT NULL,
+--    lastname VARCHAR(50),
+--    email VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin UNIQUE NOT NULL,
+--    password VARCHAR(255) NOT NULL,
+--    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+--) ENGINE=InnoDB;
+--
+--CREATE TABLE IF NOT EXISTS user_roles (
+--    user_id CHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+--    role_name VARCHAR(20) NOT NULL,
+--    PRIMARY KEY (user_id, role_name),
+--    CONSTRAINT fk_user_roles_user
+--        FOREIGN KEY (user_id)
+--        REFERENCES users(id)
+--        ON DELETE CASCADE
+--) ENGINE=InnoDB;
