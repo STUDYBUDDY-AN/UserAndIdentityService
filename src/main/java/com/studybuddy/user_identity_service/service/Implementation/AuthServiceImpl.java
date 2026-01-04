@@ -62,6 +62,7 @@ public class AuthServiceImpl implements Authservice {
 
     @Override
     public AuthResponse login(LoginCredentialsDto request) {
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ResourceNotFoundException("USER NOT FOUND"));
@@ -75,6 +76,7 @@ public class AuthServiceImpl implements Authservice {
 
     @Override
     public AuthResponse createAdmin(UserRegistrationDto request) {
+
         User admin = User.builder()
                 .id(UUID.randomUUID())
                 .firstName(request.getFirstname())

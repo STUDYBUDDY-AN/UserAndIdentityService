@@ -1,6 +1,7 @@
 package com.studybuddy.user_identity_service.service.Implementation;
 
 
+import com.studybuddy.user_identity_service.entity.User;
 import com.studybuddy.user_identity_service.service.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -12,9 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
@@ -24,15 +23,15 @@ public class JWTServiceImpl implements JWTService {
     private String jwtSecret;
 
     @Override
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
+    public String generateToken(User user) {
 
-    @Override
-    public String generateToken(Map<String, Object> additionalClaims, UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("email", user.getEmail());
+        claims.put("roles", user.getRoles());
+
         return Jwts.builder()
-                .setClaims(additionalClaims)
-                .setSubject(userDetails.getUsername())
+                .setClaims(claims)
+                .setSubject(user.getId().toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -52,8 +51,6 @@ public class JWTServiceImpl implements JWTService {
 
     @Override
     public String extractUserName(String token) {
-        // Claims claims = extractAllClaims(token);
-        // return claims.getSubject();
         return extractClaims(token, Claims::getSubject); //return extractClaims(token, claims -> claims.getSubject());
     }
 

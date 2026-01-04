@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/user_identity?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/user_identity?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
     password: Anantha2001@
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -15,6 +15,9 @@ spring:
     baseline-on-migrate: true
     validate-on-migrate: true
     repair: true
+
+server:
+  port: 9090
 
 logging:
   pattern:

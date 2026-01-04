@@ -1,6 +1,6 @@
 package com.studybuddy.user_identity_service.filter;
 
-import com.studybuddy.user_identity_service.service.Implementation.UserServiceImpl;
+import com.studybuddy.user_identity_service.service.Implementation.UserDetailsServiceImpl;
 import com.studybuddy.user_identity_service.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class JWTAuthenticationFilter extends OncePerRequestFilter{
 
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Autowired
     JWTService jwtService;
@@ -28,9 +28,9 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-       final String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String userName;
+        final String userId;
 
         // Check authenticatin header
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -40,17 +40,18 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
         // Extract the token from the header
         jwt = authHeader.substring(7);
         // Extract the username from the token (username is the email)
-        userName = jwtService.extractUserName(jwt);
+        userId = jwtService.extractUserName(jwt); // now UUID string
         // Authenticate if not already authenticated
-        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails user = userServiceImpl.loadUserByUsername(userName);
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails user = userDetailsServiceImpl.loadUserByUsername(userId);
             // Check if token is valid
             if (jwtService.isTokenValid(jwt, user)) {
                 // Update the security context holder
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user,
-                        null, user.getAuthorities());
-                // Set additional details such as user's IP address, browser, or other
-                // attributes
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                        userId,
+                        null,
+                        user.getAuthorities());
+                // Set additional details such as user's IP address, browser, or other attributes
                 authenticationToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -59,5 +60,5 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
         // Call the next filter
         filterChain.doFilter(request, response);
     }
-    
+
 }

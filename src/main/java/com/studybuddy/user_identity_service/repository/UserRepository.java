@@ -26,8 +26,8 @@ public class UserRepository {
     private static final RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
             User.builder()
                     .id(UUID.fromString(rs.getString("id")))
-                    .firstName(rs.getString("firstname"))
-                    .lastName(rs.getString("lastname"))
+                    .firstName(rs.getString("first_name"))
+                    .lastName(rs.getString("last_name"))
                     .email(rs.getString("email"))
                     .password(rs.getString("password"))
                     .build();
@@ -50,7 +50,7 @@ public class UserRepository {
         }
 
         String userSql = """
-            INSERT INTO users (id, firstname, lastname, email, password)
+            INSERT INTO users (id, first_name, last_name, email, password)
             VALUES (?, ?, ?, ?, ?)
         """;
 
@@ -92,12 +92,17 @@ public class UserRepository {
         );
     }
 
+    public Optional<User> findById(String id) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        return Optional.ofNullable(jdbc.queryForObject(sql, USER_ROW_MAPPER, id));
+    }
+
     /* ---------- FIND BY EMAIL ---------- */
 
     public Optional<User> findByEmail(String email) {
 
         String userSql = """
-            SELECT id, firstname, lastname, email, password
+            SELECT id, first_name, last_name, email, password
             FROM users
             WHERE email = ?
         """;
