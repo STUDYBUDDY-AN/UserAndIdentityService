@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
