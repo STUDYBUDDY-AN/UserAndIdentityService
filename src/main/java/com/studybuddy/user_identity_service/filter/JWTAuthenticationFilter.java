@@ -43,7 +43,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter{
         userId = jwtService.extractUserName(jwt);
         // Authenticate if not already authenticated
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails user = userDetailsServiceImpl.loadUserByUsername(userId);
+            UserDetails user = userDetailsServiceImpl.loadUserById(userId);
             // Check if token is valid
             if (jwtService.isTokenValid(jwt, user)) {
                 // Update the security context holder
