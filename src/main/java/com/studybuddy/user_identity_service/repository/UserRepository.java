@@ -114,18 +114,34 @@ public class UserRepository {
 
     /* ---------- FIND BY ID ---------- */
 
-    public Optional<User> findById(String id) {
-        log.debug("Attempting to find user by id: {}", id);
-        String sql = "SELECT * FROM users WHERE id = ?";
+    public Optional<User> findById(UUID id) {
+
+        String userSql = """
+        SELECT *
+        FROM users
+        WHERE id = ?
+    """;
+
+        String roleSql = """
+        SELECT role_name
+        FROM user_roles
+        WHERE user_id = ?
+    """;
+
         try {
-            User user = jdbc.queryForObject(sql, USER_ROW_MAPPER, id);
-            return Optional.ofNullable(user);
-        } catch (EmptyResultDataAccessException e) {
-            log.warn("User not found with id: {}", id);
+            User user = jdbc.queryForObject(userSql, USER_ROW_MAPPER, id.toString());
+
+            List<Role> roles = jdbc.query(
+                    roleSql,
+                    (rs, rowNum) -> Role.valueOf(rs.getString("role_name")),
+                    user.getId().toString()
+            );
+
+            user.setRoles(roles);
+            return Optional.of(user);
+
+        } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
-        } catch (DataAccessException e) {
-            log.error("Database error finding user by id: {}", id, e);
-            throw new RuntimeException("Error finding user by id", e);
         }
     }
 

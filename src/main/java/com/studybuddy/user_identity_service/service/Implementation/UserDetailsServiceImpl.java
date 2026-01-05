@@ -24,6 +24,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
     // Used by JWTFilter for TOKEN VALIDATION (ID)
     public UserDetails loadUserById(String userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found with id: "+ userId));
+        return userRepository.findById(UUID.fromString(userId)).orElseThrow(() -> new UsernameNotFoundException("User not found with id: "+ userId));
     }
 }
