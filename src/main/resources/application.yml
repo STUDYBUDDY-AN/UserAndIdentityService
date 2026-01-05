@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: user_identity_service
   datasource:
     url: jdbc:mysql://localhost:3307/user_identity?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
@@ -17,7 +19,7 @@ spring:
     repair: true
 
 server:
-  port: 9090
+  port: 8081
 
 logging:
   pattern:
