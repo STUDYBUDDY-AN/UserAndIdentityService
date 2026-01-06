@@ -37,7 +37,7 @@ logging:
       fetch-size: 100
 
 app:
-  jwtSecret: TXlTdXBlclNlY3VyZUp3dFNlY3JldEtleUZvckxlYXJuaW5nMTIzIQ==
+  jwtSecret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
   jwtExpirationMs: 86400000
   admin:
     email: admin@studybuddy.com

@@ -10,12 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -48,9 +44,13 @@ public class AuthController {
     }
 
     @PostMapping("/admin/create-admin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AuthResponse> createAdmin(@RequestBody UserRegistrationDto userRegistrationDto) {
+    public ResponseEntity<AuthResponse> createAdmin(
+            @RequestHeader(value = "X-User-Roles", required = false) String userRoles,
+            @RequestBody UserRegistrationDto userRegistrationDto) {
 
+        if (userRoles == null || !userRoles.contains("ADMIN")) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         log.info("Admin Signup attempt for email: {}", userRegistrationDto.getEmail());
         AuthResponse authResponse = authservice.createAdmin(userRegistrationDto);
         log.info("Admin Signup successful for email: {}", userRegistrationDto.getEmail());

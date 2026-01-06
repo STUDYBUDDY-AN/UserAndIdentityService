@@ -43,7 +43,7 @@ public class SecurityConfig {
         httpSecurity.authenticationProvider(authenticationProvider());
 
         httpSecurity.authorizeHttpRequests(configurer -> configurer
-                                                                .requestMatchers("/v1/auth/login","/v1/auth/register", "/v1/auth/verify")
+                                                                .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/verify", "/error")
                                                                 .permitAll()
                                                                 .anyRequest()
                                                                 .authenticated());
