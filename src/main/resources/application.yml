@@ -3,8 +3,8 @@ spring:
     name: user_identity_service
   datasource:
     url: jdbc:mysql://localhost:3307/user_identity?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: root
-    password: Anantha2001@
+    username: mr.mime
+    password: StudyBuddy*123
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   # Enable HikariCP connection pool (default)
@@ -26,7 +26,7 @@ logging:
     console: "%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n"
 
   level:
-    org.springframework.jdbc.core: DEBUG   # Show SQL logs
+    org.springframework.jdbc.core: INFO   # Changed from DEBUG to INFO for performance
 
   sql:
     init:
