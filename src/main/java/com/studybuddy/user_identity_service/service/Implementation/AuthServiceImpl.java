@@ -40,7 +40,7 @@ public class AuthServiceImpl implements Authservice {
     public AuthResponse register(UserRegistrationDto request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists");
         }
 
         User user = User.builder()
@@ -62,6 +62,7 @@ public class AuthServiceImpl implements Authservice {
 
     @Override
     public AuthResponse login(LoginCredentialsDto request) {
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ResourceNotFoundException("USER NOT FOUND"));
@@ -70,11 +71,13 @@ public class AuthServiceImpl implements Authservice {
 
         return AuthResponse.builder()
                 .token(jwtToken)
+                .email(user.getEmail())
                 .build();
     }
 
     @Override
     public AuthResponse createAdmin(UserRegistrationDto request) {
+
         User admin = User.builder()
                 .id(UUID.randomUUID())
                 .firstName(request.getFirstname())
