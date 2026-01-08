@@ -3,15 +3,24 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
-    container_name: mysql_user_identity
-    restart: always
+    container_name: mysql-user
+    restart: unless-stopped
+    command:
+      - --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: Anantha2001@
+      MYSQL_ROOT_PASSWORD: NamitAnantha
       MYSQL_DATABASE: user_identity
+      MYSQL_USER: mr.mime
+      MYSQL_PASSWORD: StudyBuddy*123
     ports:
       - "3307:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_user_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pNamitAnantha"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  mysql_data:
+  mysql_user_data:
