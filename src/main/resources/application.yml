@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: user_identity_service
+  datasource:
+    url: jdbc:mysql://localhost:3307/user_identity?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: mr.mime
+    password: StudyBuddy*123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # Enable HikariCP connection pool (default)
+  datasource.hikari:
+    maximum-pool-size: 10
+    minimum-idle: 2
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    validate-on-migrate: true
+    repair: true
+
+server:
+  port: 8081
+
+logging:
+  pattern:
+    console: "%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %msg%n"
+
+  level:
+    org.springframework.jdbc.core: INFO   # Changed from DEBUG to INFO for performance
+
+  sql:
+    init:
+      mode: always   # run schema.sql if present
+
+  jdbc:
+    template:
+      fetch-size: 100
+
+app:
+  jwtSecret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+  jwtExpirationMs: 86400000
+  admin:
+    email: admin@studybuddy.com
+    password: admin123
+
+
+
+
